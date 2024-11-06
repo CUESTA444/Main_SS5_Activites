@@ -54,7 +54,7 @@
 
     <!-- Contents -->
     <div class="container mt-4">
-    <h3 class="text-center">Employees List</h3>
+    <h3 class="text-center">Transaction List</h3>
         <!-- Scrollable Table Container -->
         <div class="table-container">
             <!-- Table for displaying employees -->
@@ -64,6 +64,7 @@
                         <th scope="col">Transaction ID</th>
                         <th scope="col">Customer</th>
                         <th scope="col">Purchase Date</th>
+                        <th scope="col">Books Purchased</th>
                         <th scope="col">Total Books Purchased</th>
                         <th scope="col">Employee ID</th>
                     </tr>
@@ -78,7 +79,8 @@
                             st.DateTime,
                             st.TotalBooks,
                             st.Receipt,
-                            e.EmployeeID
+                            e.EmployeeID,
+                            sb.ISBN
                         FROM
                             SalesTransaction st
                         JOIN Customers c ON st.CustomerID = c.CustomerID
@@ -90,10 +92,15 @@
                         
                         if ($GetSalesRecord_Query -> num_rows > 0){
                             while ($Row = $GetSalesRecord_Query -> fetch_assoc()){
+                                $row_ISBN = $Row['ISBN'];
+                                $Book_Purchased = "SELECT Title FROM Books WHERE ISBN = '$row_ISBN'";
+                                $Book_Purchased_query = $connection -> query($Book_Purchased);
+                                $Book_Purchased_Result = $Book_Purchased_query -> fetch_assoc();
                                 echo '<tr>
                                         <td>'. htmlspecialchars($Row['EmployeeTaxpayerID']) .'</td>
                                         <td>'. htmlspecialchars($Row['FirstName']) . ' ' . htmlspecialchars($Row['LastName']) .'</td>
-                                        <td>'. htmlspecialchars($Row['DateTime'] ).'</td>
+                                        <td>'. htmlspecialchars($Row['DateTime']).'</td>
+                                        <td>'. htmlspecialchars($Book_Purchased_Result['Title']).'</td>
                                         <td>'. htmlspecialchars($Row['TotalBooks']) .'</td>
                                         <td>'. htmlspecialchars($Row['EmployeeID']) .'</td>
                                     </tr>';

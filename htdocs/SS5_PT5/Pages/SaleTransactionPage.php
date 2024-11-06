@@ -2,29 +2,7 @@
     session_start();
     include '../Functions/Connection.php';
 
-    $ISBN = $_GET['isbn'];
-
-    $BookInformationResult = null;
-    $EmployeeTaxPayerID = null;
-    $EmployeeInformation = null;
-
-    if ($ISBN){
-        $GetBookInformation = "SELECT * FROM Books JOIN EmployeeBooks eb ON Books.ISBN = eb.ISBN WHERE Books.ISBN = '$ISBN'";
-        $BookInformationQuery = $connection -> query($GetBookInformation);
-        $BookInformationResult = $BookInformationQuery -> fetch_assoc();
-
-        if ($BookInformationResult == null || $BookInformationResult == ""){
-            $GetBookInformation = "SELECT * FROM Books WHERE ISBN = '$ISBN'";
-            $BookInformationQuery = $connection -> query($GetBookInformation);
-            $BookInformationResult = $BookInformationQuery -> fetch_assoc();
-        }else{
-            $EmployeeTaxPayerID = $BookInformationResult['TaxpayerID'];
-
-            $GetEmployeeInformation = "SELECT * FROM Employees WHERE TaxpayerID = '$EmployeeTaxPayerID'";
-            $EmployeeInformationQuery = $connection -> query($GetEmployeeInformation);
-            $EmployeeInformation = $EmployeeInformationQuery -> fetch_assoc(); 
-        }
-    }
+    $CustomerID = $_GET['customer_id'];
 ?>
 
 
@@ -79,52 +57,35 @@
     <div class="container mt-4">
         <h3 class="text-center mb-4"> Sales Transaction </h3>
 
-        <form action="../Functions/mainFunctions/UpdateBook.php" method="POST" class="p-4 shadow-sm rounded" style="background-color: #f9f9f9;">
+        <form action="../Functions/mainFunctions/AddSales.php" method="POST" class="p-4 shadow-sm rounded" style="background-color: #f9f9f9;">
             <div class="mb-3">
-                <label for="isbn" class="form-label">ISBN</label>
-                <input type="text" class="form-control" id="isbn" name="isbn" value="<?php echo htmlspecialchars($BookInformationResult['ISBN']); ?>" required>
-            </div>
+                <label for="isbn" class="form-label">Choose Book</label>
+                <select class="form-control" id="isbn" name="isbn" required>
+                    <option value="">Choose a Book</option>
+                        <?php
+                            // Fetch employees from the database
+                            $BooksQuery = "SELECT * FROM Books JOIN EmployeeBooks ON Books.ISBN = EmployeeBooks.ISBN ORDER BY Books.Title DESC";
+                            $BooksResult = $connection->query($BooksQuery);
 
-            <div class="mb-3">
-                <label for="author" class="form-label">Choose Author <?php if (!empty($EmployeeInformation)){echo  ', Current Author: ( '.$EmployeeInformation['FirstName'] . ' ' . $EmployeeInformation['LastName'] . ' )';} ?></label>
-                <select class="form-control" id="author" name="author">
-                    <option value="">Choose an Author</option>
-                    <?php
-                        // Fetch employees from the database
-                        $employeeQuery = "SELECT TaxpayerID, FirstName, LastName FROM Employees ORDER BY LastName";
-                        $employeeResult = $connection->query($employeeQuery);
-
-                        // Loop through each employee and create an option for the select dropdown
-                        while ($employee = $employeeResult->fetch_assoc()) {
-                            // Display the employee name in the dropdown
-                            echo '<option value="' . htmlspecialchars($employee['TaxpayerID']) . '">'
-                                . htmlspecialchars($employee['FirstName'] . ' ' . $employee['LastName']) . 
-                                '</option>';
-                        }
-                    ?>
-                    <option value="Removed"> Removed Author </option>
+                            // Loop through each employee and create an option for the select dropdown
+                            while ($Row = $BooksResult->fetch_assoc()) {
+                                // Display the employee name in the dropdown
+                                echo '<option value="' . htmlspecialchars($Row['ISBN']) . '">'
+                                    . htmlspecialchars($Row['Title']) . '</option>';
+                            }
+                        ?>
                 </select>
             </div>
             
             <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control" id="title" name="title" value="<?php echo htmlspecialchars($BookInformationResult['Title']); ?>" required>
+                <label for="quantity" class="form-label">Quantity</label>
+                <input type="number" class="form-control" id="quantity" name="quantity" min="1" max="9999" placeholder="amount" required>
             </div>
 
-            <div class="mb-3">
-                <label for="publisher" class="form-label">Publisher</label>
-                <input type="text" class="form-control" id="publisher" name="publisher" value="<?php echo htmlspecialchars($BookInformationResult['Publisher']); ?>" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="year" class="form-label">Year</label>
-                <input type="number" class="form-control" id="year" name="year" min="1000" max="9999" placeholder="YYYY" value="<?php echo htmlspecialchars($BookInformationResult['Year']); ?>" required>
-            </div>
-
-            <input type="hidden" class="form-control" id="isbn" name="isbn" value="<?php echo $ISBN; ?>">
+            <input type="hidden" class="form-control" id="customerID" name="customerID" value="<?php echo $CustomerID; ?>">
 
             <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-success">Update</button>
+                <button type="submit" class="btn btn-success">Place Order</button>
             </div>
         </form>
     </div>
