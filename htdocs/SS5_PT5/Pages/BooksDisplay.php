@@ -81,7 +81,8 @@
                             b.Year,
                             b.Publisher,
                             e.Pseudonym,
-                            b.ISBN
+                            b.ISBN,
+                            eb.TaxpayerID
                         FROM
                             Books b
                         LEFT JOIN EmployeeBooks eb ON eb.ISBN = b.ISBN
@@ -93,6 +94,7 @@
                         
                         while ($Row = $GetBooksListQuery -> fetch_assoc()){
                             $FinalizedAuthor = $Row['Pseudonym'];
+                            $FinalizeAuthorID = $Row['TaxpayerID'];
                            
                             echo '<tr>
                                     <td>'. htmlspecialchars($Row['Title']) .'</td>
@@ -100,7 +102,7 @@
                                     <td>'. htmlspecialchars($Row['Year'] ).'</td>
                                     <td>'. htmlspecialchars($Row['Publisher']) .'</td>
                                     <td>
-                                        <a href="EditBooksPage.php?isbn='. urlencode($Row['ISBN']) .'" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="EditBooksPage.php?isbn='. urlencode($Row['ISBN']) .'&authorID='. $FinalizeAuthorID .'" class="btn btn-warning btn-sm">Edit</a>
                                         <a href="../Functions/mainFunctions/RemoveBook.php?isbn='. urlencode($Row['ISBN']) .'" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure?\')">Delete</a>
                                     </td>
                                 </tr>';

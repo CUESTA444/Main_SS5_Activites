@@ -53,8 +53,8 @@
     </nav>  
 
     <!-- Contents -->
-    <div class="container mt-4">
-    <h3 class="text-center">Transaction List</h3>
+    <div class="container mt-5">
+    <h3 class="text-center mb-5">Transaction List</h3>
         <!-- Scrollable Table Container -->
         <div class="table-container">
             <!-- Table for displaying employees -->
@@ -97,7 +97,7 @@
                                 $Book_Purchased_query = $connection -> query($Book_Purchased);
                                 $Book_Purchased_Result = $Book_Purchased_query -> fetch_assoc();
                                 echo '<tr>
-                                        <td>'. htmlspecialchars($Row['EmployeeTaxpayerID']) .'</td>
+                                        <td>'. htmlspecialchars($Row['SaleID']) .'</td>
                                         <td>'. htmlspecialchars($Row['FirstName']) . ' ' . htmlspecialchars($Row['LastName']) .'</td>
                                         <td>'. htmlspecialchars($Row['DateTime']).'</td>
                                         <td>'. htmlspecialchars($Book_Purchased_Result['Title']).'</td>
@@ -106,7 +106,7 @@
                                     </tr>';
                             }
                         }else{
-                            echo "Empty: No Sales";
+                            //echo "Empty: No Sales";
                         }
                     ?>
                 </tbody>

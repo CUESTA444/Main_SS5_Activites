@@ -55,7 +55,7 @@
     <div class="container mt-4">
         <h3 class="text-center mb-4">Add New Book</h3>
 
-        <form action="../Functions/mainFunctions/AddBook.php" method="POST" class="p-4 shadow-sm rounded" style="background-color: #f9f9f9;">
+        <form action="../Functions/mainFunctions/AddBook.php" method="POST" enctype="multipart/form-data" class="p-4 shadow-sm rounded" style="background-color: #f9f9f9;">
             <div class="mb-3">
                 <label for="isbn" class="form-label">ISBN</label>
                 <input type="text" class="form-control" id="isbn" name="isbn" required>
@@ -76,6 +76,12 @@
                 <input type="text" class="form-control" id="publisher" name="publisher" required>
             </div>
 
+            <!-- File Input -->
+            <div class="mb-3">
+                <label for="bookCover" class="form-label">Book Cover</label>
+                <input type="file" class="form-control" id="bookCover" name="bookCover" accept=".png, .jpg, .jpeg">
+            </div>
+
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-success">Update</button>
             </div>
@@ -87,9 +93,23 @@
         <p class="text-center">&copy; 2024 Local Bookstore. All Rights Reserved.</p>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <!-- Bootstrap 5 JS and MDB JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mdb-ui-kit@5.3.0/dist/js/mdb.min.js"></script>
-</body>
 
+    <script>
+        const MAX_FILE_SIZE = 2 * 1024 * 1024;
+
+        $('#bookCover').on('change', function(event){
+            const file = event.target.files[0];
+
+            if (file){
+                if (file.size > MAX_FILE_SIZE){
+                    alert("The file size is too large. Please select a file smaller than 2 MB.");
+                }
+            }
+        })
+    </script>
+</body>
 </html>

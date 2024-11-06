@@ -62,7 +62,8 @@
                     b.Year,
                     b.Publisher,
                     e.Pseudonym,
-                    b.ISBN
+                    b.ISBN,
+                    b.Image_Path
                 FROM
                     Employees e
                 JOIN EmployeeBooks eb ON e.TaxpayerID = eb.TaxpayerID
@@ -73,10 +74,16 @@
                 $GetBooksListQuery = $connection -> query($GetBooksList);
 
                 while ($Row = $GetBooksListQuery -> fetch_assoc()){
+                    $FinalizedBookCoverPngPath = null;
+
+                    if ($Row['Image_Path'] != null){
+                        $BookCoverPngPathFile = htmlspecialchars($Row['Image_Path']);
+                        $FinalizedBookCoverPngPath = "../Books_Cover/" . basename($BookCoverPngPathFile);
+                    }
                     echo '
                         <div class="col">
                             <div class="card">
-                                <img src="'. (!empty($Row['Image_Path']) ? htmlspecialchars($Row['Image_Path']) : 'https://via.placeholder.com/150') .'"  class="card-img-top" alt="Book Image">
+                                <img src="'. (!empty($FinalizedBookCoverPngPath) ? $FinalizedBookCoverPngPath : 'https://via.placeholder.com/150') .'" class="card-img-top img-fluid" alt="Book Image" style="object-fit: contain; max-height: 250px;">
                                 <div class="card-body">
                                     <h5 class="card-title">'. $Row['Title'] .'</h5>
                                     <p class="card-text">Author: '. $Row['Pseudonym'] .'</p>

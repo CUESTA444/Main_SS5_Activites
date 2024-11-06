@@ -3,6 +3,7 @@
     include '../Functions/Connection.php';
 
     $ISBN = $_GET['isbn'];
+    $currentAuthorID = $_GET['authorID'];
 
     $BookInformationResult = null;
     $EmployeeTaxPayerID = null;
@@ -79,7 +80,7 @@
     <div class="container mt-4">
         <h3 class="text-center mb-4"> Update Book </h3>
 
-        <form action="../Functions/mainFunctions/UpdateBook.php" method="POST" class="p-4 shadow-sm rounded" style="background-color: #f9f9f9;">
+        <form action="../Functions/mainFunctions/UpdateBook.php" method="POST" enctype="multipart/form-data" class="p-4 shadow-sm rounded" style="background-color: #f9f9f9;">
             <div class="mb-3">
                 <label for="isbn" class="form-label">ISBN</label>
                 <input type="text" class="form-control" id="isbn" name="isbn" value="<?php echo htmlspecialchars($BookInformationResult['ISBN']); ?>" required>
@@ -94,8 +95,12 @@
                         $employeeQuery = "SELECT TaxpayerID, FirstName, LastName FROM Employees ORDER BY LastName";
                         $employeeResult = $connection->query($employeeQuery);
 
+                        $currentAuthorID = isset($currentAuthorID) ? $currentAuthorID : ''; // Replace this with the actual value
+
                         // Loop through each employee and create an option for the select dropdown
                         while ($employee = $employeeResult->fetch_assoc()) {
+                            $selected = ($employee['TaxpayerID'] == $currentAuthorID) ? 'selected' : '';
+
                             // Display the employee name in the dropdown
                             echo '<option value="' . htmlspecialchars($employee['TaxpayerID']) . '">'
                                 . htmlspecialchars($employee['FirstName'] . ' ' . $employee['LastName']) . 
@@ -119,6 +124,12 @@
             <div class="mb-3">
                 <label for="year" class="form-label">Year</label>
                 <input type="number" class="form-control" id="year" name="year" min="1000" max="9999" placeholder="YYYY" value="<?php echo htmlspecialchars($BookInformationResult['Year']); ?>" required>
+            </div>
+
+            <!-- File Input -->
+            <div class="mb-3">
+                <label for="bookCover" class="form-label">Book Cover</label>
+                <input type="file" class="form-control" id="bookCover" name="bookCover" accept=".png, .jpg, .jpeg">
             </div>
 
             <input type="hidden" class="form-control" id="isbn" name="isbn" value="<?php echo $ISBN; ?>">
