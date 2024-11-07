@@ -67,6 +67,31 @@
             </div>
 
             <div class="mb-3">
+                <label for="author" class="form-label">Choose Author <?php if (!empty($EmployeeInformation)){echo  ', Current Author: ( '.$EmployeeInformation['FirstName'] . ' ' . $EmployeeInformation['LastName'] . ' )';} ?></label>
+                <select class="form-control" id="author" name="author">
+                    <option value="">Choose an Author</option>
+                    <?php
+                        // Fetch employees from the database
+                        $employeeQuery = "SELECT TaxpayerID, FirstName, LastName FROM Employees ORDER BY LastName";
+                        $employeeResult = $connection->query($employeeQuery);
+
+                        $currentAuthorID = isset($currentAuthorID) ? $currentAuthorID : ''; // Replace this with the actual value
+
+                        // Loop through each employee and create an option for the select dropdown
+                        while ($employee = $employeeResult->fetch_assoc()) {
+                            $selected = ($employee['TaxpayerID'] == $currentAuthorID) ? 'selected' : '';
+
+                            // Display the employee name in the dropdown
+                            echo '<option value="' . htmlspecialchars($employee['TaxpayerID']) . '">'
+                                . htmlspecialchars($employee['FirstName'] . ' ' . $employee['LastName']) . 
+                                '</option>';
+                        }
+                    ?>
+                    <option value="Removed"> Removed Author </option>
+                </select>
+            </div>
+
+            <div class="mb-3">
                 <label for="year" class="form-label">Year</label>
                 <input type="number" class="form-control" id="year" name="year" min="1000" max="9999" placeholder="YYYY" required>
             </div>
@@ -83,7 +108,7 @@
             </div>
 
             <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-success">Update</button>
+                <button type="submit" class="btn btn-success">Add Book</button>
             </div>
         </form>
     </div>
