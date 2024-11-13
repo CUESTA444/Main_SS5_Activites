@@ -2,6 +2,23 @@
     session_start();
     include '../Functions/Connection.php';
 
+    $UserID = "";
+    if (isset($_SESSION['UserID'])){
+        if ($_SESSION['UserID'] != "" && $_SESSION['UserID'] != null){
+            if ($_SESSION['UserType'] != "Admin"){
+                header('Location: clientCatalogView.php');
+                exit; 
+            }else{
+                $UserID = $_SESSION['UserID'];
+            }
+        }else{
+            header('Location: LoginPage.php');
+            exit;
+        }
+    }else{
+        header('Location: LoginPage.php');
+        exit;
+    }
 ?>
 
 
@@ -46,6 +63,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="EmployeeDisplay.php">Employees</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../Functions/mainFunctions/Logout.php">Logout</a>
                     </li>
                 </ul>
             </div>
