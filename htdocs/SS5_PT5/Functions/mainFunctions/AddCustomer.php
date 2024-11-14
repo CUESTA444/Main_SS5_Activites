@@ -8,8 +8,19 @@
         $DateOfBirth = $_POST['dateOfBirth'];
         $Phone = $_POST['phone'];
         $Address = $_POST['Address'];
-        $Password = $_POST['password'];
-        $username = $_POST['username'];
+        $Password = "";
+        $username = "";
+
+        if (isset($_POST['password'])){
+            if ($_POST['password'] != null){
+                $Password = $_POST['password'];
+            }
+        }
+        if (isset($_POST['username'])){
+            if ($_POST['username'] != null){
+                $username = $_POST['username'];
+            }
+        }
 
         $InsertCustomer = "";
 

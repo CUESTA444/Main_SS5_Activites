@@ -167,7 +167,7 @@
         Logged in as: <strong>
                 <?php if($UserID != ""){echo htmlspecialchars($GetUserInfos_Result['FirstName']) . ' ' . htmlspecialchars($GetUserInfos_Result['LastName']);} ?>
             </strong>
-        <a href="logout.php" class="btn btn-light btn-sm ms-3">Logout</a>
+        <a href="../Functions/mainFunctions/Logout.php" class="btn btn-light btn-sm ms-3">Logout</a>
     </span>
 </nav>
 
@@ -182,7 +182,7 @@
     
     <!-- Purchase Section -->
     <div class="purchase-section">
-        <form action="AddSales.php" method="post">
+        <form action="../Functions/mainFunctions/AddSales.php" method="post">
             <label for="quantity" class="quantity-label">Quantity:</label>
             <input type="number" id="quantity" name="quantity" value="1" min="1" class="quantity-input">
 

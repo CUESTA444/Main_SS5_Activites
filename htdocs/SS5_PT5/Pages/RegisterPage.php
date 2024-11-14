@@ -10,13 +10,7 @@
                 header('Location: BooksDisplay.php');
                 exit; 
             }
-        }else{
-            header('Location: LoginPage.php');
-            exit;
         }
-    }else{
-        header('Location: LoginPage.php');
-        exit;
     }
 ?>
 
