@@ -22,7 +22,7 @@
 
                 // Add Png Book Cover
                 $Sanitized_FileName = uniqid(). "_" . basename($FileName);
-                $TARGET_UPLOAD_DIRECTORY ="/workspaces/Main_SS5_Activites/htdocs/SS5_PT5/Books_Cover/";
+                $TARGET_UPLOAD_DIRECTORY ="/workspaces/Main_SS5_Activities/htdocs/SS5_PT5/Books_Cover/";
                 $pngUpload_Path = $TARGET_UPLOAD_DIRECTORY . $Sanitized_FileName;
 
                 $stmt = $connection -> prepare("UPDATE Books SET Image_Path = ? WHERE ISBN = '$ISBN'");
