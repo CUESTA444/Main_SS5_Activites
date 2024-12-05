@@ -7,11 +7,23 @@
         $Title = $_POST['title'];
         $Year = $_POST['year'];
         $Publisher = $_POST['publisher'];
+        $FinalizedAuthor = $_POST['author'];
 
         $InsertBook = "INSERT INTO Books (ISBN, Title, Year, Publisher) VALUES (?,?,?,?)";
         $InsertBookQuery = $connection -> prepare($InsertBook);
         
         $InsertBookQuery -> bind_param('ssss', $ISBN, $Title, $Year, $Publisher);
+
+        if ($InsertBookQuery -> execute()){ 
+            // We Insert 
+            $INSERT_EB = "INSERT INTO EmployeeBooks (ISBN, TaxpayerID) VALUES (?,?)";
+            $INSERT_EB_QUERY = $connection -> prepare($INSERT_EB);
+            $INSERT_EB_QUERY -> bind_param('ss', $ISBN ,$FinalizedAuthor);
+            //Execute query
+            $INSERT_EB_QUERY -> execute();
+        }else{
+            echo "Error Occurred";
+        }
 
         if (isset($_FILES['bookCover'])){
             if ($_FILES['bookCover']['size'] != 0){
@@ -30,19 +42,22 @@
 
                 if ($stmt -> execute()){
                     move_uploaded_file($File_tmpName, $pngUpload_Path);
+                    $stmt -> close();
+
+                    header('Location: ../../Pages/BooksDisplay.php');
+                    exit;
+                }else{
+                    header('Location: ../../Pages/BooksDisplay.php');
+                    exit;
                 }
 
-                $stmt -> close();
+            }else{
+                header('Location: ../../Pages/BooksDisplay.php');
+                exit;
             }
-        }
-
-
-        if ($InsertBookQuery -> execute()){
+        }else{
             header('Location: ../../Pages/BooksDisplay.php');
             exit;
-        }else{
-            echo "Error Occurred";
         }
-
     }
 ?> 
